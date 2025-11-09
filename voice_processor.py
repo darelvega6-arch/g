@@ -1,8 +1,8 @@
 import whisper
 import torch
 from pyannote.audio import Pipeline
-from googletrans import Translator
-from TTS.api import TTS
+from google_trans_new import google_translator
+import pyttsx3
 import librosa
 import soundfile as sf
 import numpy as np
@@ -11,8 +11,8 @@ from config import WHISPER_MODEL, TTS_MODEL
 class VoiceProcessor:
     def __init__(self):
         self.whisper_model = whisper.load_model(WHISPER_MODEL)
-        self.translator = Translator()
-        self.tts = TTS(TTS_MODEL)
+        self.translator = google_translator()
+        self.tts = pyttsx3.init()
         
         # Inicializar pipeline de separación de hablantes
         try:
@@ -55,24 +55,24 @@ class VoiceProcessor:
     def translate_text(self, text, target_language):
         """Traducir texto"""
         try:
-            translated = self.translator.translate(text, dest=target_language)
-            return translated.text
+            translated = self.translator.translate(text, lang_tgt=target_language)
+            return translated
         except Exception as e:
             raise Exception(f"Error en traducción: {str(e)}")
 
     def clone_voice_and_speak(self, text, reference_audio_path, output_path, target_language='es'):
-        """Clonar voz y generar audio"""
+        """Generar audio con TTS"""
         try:
-            # Generar audio con voz clonada
-            self.tts.tts_to_file(
-                text=text,
-                speaker_wav=reference_audio_path,
-                language=target_language,
-                file_path=output_path
-            )
+            # Configurar TTS
+            self.tts.setProperty('rate', 150)
+            self.tts.setProperty('volume', 0.9)
+            
+            # Generar audio
+            self.tts.save_to_file(text, output_path)
+            self.tts.runAndWait()
             return output_path
         except Exception as e:
-            raise Exception(f"Error en clonación de voz: {str(e)}")
+            raise Exception(f"Error en generación de voz: {str(e)}")
 
     def process_segments(self, segments, reference_audio, target_language):
         """Procesar segmentos de audio individualmente"""
