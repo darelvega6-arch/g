@@ -1,7 +1,7 @@
 import os
 
 # Token del bot de Telegram
-TELEGRAM_TOKEN = "8195405662:AAE6z92H7iz8H6BJB02uhyoHfjXYtXQvj38"
+TELEGRAM_TOKEN = os.environ.get("TELEGRAM_TOKEN")
 
 # Configuración de directorios
 TEMP_DIR = "temp"
