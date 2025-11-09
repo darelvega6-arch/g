@@ -1,12 +1,10 @@
 import whisper
-import torch
-from pyannote.audio import Pipeline
 from google_trans_new import google_translator
 import pyttsx3
 import librosa
 import soundfile as sf
 import numpy as np
-from config import WHISPER_MODEL, TTS_MODEL
+from config import WHISPER_MODEL
 
 class VoiceProcessor:
     def __init__(self):
@@ -14,12 +12,8 @@ class VoiceProcessor:
         self.translator = google_translator()
         self.tts = pyttsx3.init()
         
-        # Inicializar pipeline de separación de hablantes
-        try:
-            self.speaker_pipeline = Pipeline.from_pretrained("pyannote/speaker-diarization-3.1")
-        except:
-            self.speaker_pipeline = None
-            print("Advertencia: No se pudo cargar el modelo de separación de hablantes")
+        # Separación de hablantes deshabilitada por simplicidad
+        self.speaker_pipeline = None
 
     def transcribe_audio(self, audio_path):
         """Transcribir audio con Whisper"""

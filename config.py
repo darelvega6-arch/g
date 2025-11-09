@@ -9,7 +9,6 @@ OUTPUT_DIR = "output"
 
 # Configuración de modelos
 WHISPER_MODEL = "base"  # base, small, medium, large
-TTS_MODEL = "tts_models/multilingual/multi-dataset/xtts_v2"
 
 # Idiomas soportados
 SUPPORTED_LANGUAGES = {
